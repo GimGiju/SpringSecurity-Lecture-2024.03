@@ -20,5 +20,4 @@ public interface SecurityUserService {
 
     void deleteSecurityUser(String uid);
 
-
 }
