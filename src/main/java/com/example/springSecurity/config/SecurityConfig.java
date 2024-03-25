@@ -40,6 +40,22 @@ public class SecurityConfig {
 
         return http.build();
 
+        //위의 코드는 Spring Security를 사용하여 웹 애플리케이션의 보안을 설정하는 Spring 구성 클래스입니다.
 
+        //@Configuration 어노테이션은 이 클래스가 Spring의 구성 클래스임을 나타냅니다. @EnableWebSecurity 어노테이션은 Spring Security를 이용한 웹 보안을 활성화합니다.
+
+        //@Bean 어노테이션은 SecurityFilterChain 객체를 반환하는 메서드를 표시합니다. 이 SecurityFilterChain은 Spring Security의 필터 체인을 구성하는 데 사용됩니다.
+
+        //filterChain() 메서드는 HttpSecurity 객체를 매개변수로 받아 Spring Security의 웹 보안 설정을 구성합니다.
+
+        //csrf(auth -> auth.disable()): CSRF(Cross-Site Request Forgery) 보호 기능을 비활성화합니다.
+        //headers(x -> x.frameOptions(y -> y.disable())): X-Frame-Options 헤더를 비활성화하여 CKEditor 이미지 업로드를 가능하게 합니다.
+        //authorizeHttpRequests(): HTTP 요청에 대한 권한 설정을 구성합니다.
+        //dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll(): FORWARD 방식으로 페이지를 전달할 때는 모든 사용자에게 허용합니다.
+        //requestMatchers(): 특정 요청 경로에 대한 권한 설정을 구성합니다.
+        //anyRequest().authenticated(): 그 외의 모든 요청은 인증된 사용자만 허용합니다.
+        //formLogin(auth -> auth.loginPage("/user/login")...): 사용자 로그인 페이지 및 로그인 처리 URL을 설정합니다.
+        //logout(auth -> auth.logoutUrl("/user/logout")...): 사용자 로그아웃 처리를 설정합니다.
+        //이 설정을 사용하면 Spring Security를 통해 웹 애플리케이션의 인증 및 권한 부여를 구성할 수 있습니다.
     }
 }
