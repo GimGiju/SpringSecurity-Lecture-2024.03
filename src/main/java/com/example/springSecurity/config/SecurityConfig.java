@@ -1,6 +1,8 @@
 package com.example.springSecurity.config;
 
+import com.example.springSecurity.service.MyOAuth2UserService;
 import jakarta.servlet.DispatcherType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    @Autowired private MyOAuth2UserService myOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -29,6 +32,15 @@ public class SecurityConfig {
                         .passwordParameter("pwd")
                         .defaultSuccessUrl("/user/loginSuccess", true) 		// 내가 로그인후 해야할 일, 예) 세션 세팅, 오늘의 메세지 등
                         .permitAll()
+                )
+                .oauth2Login(auth -> auth                   // 소셜 로그인을 담당하는 부분!
+                        .loginPage("/user/login")
+                        // 소셜 로그인이 완료된 이후의 후처리
+                        // 1. 코드 받기(인증), 2. 액세스 토근받기(권한) 3. 사용자 프로필 정보를 가져옴
+                        // 4. 3에서 받은 정보를 토대로 DB에 없으면 새로운 가입을 시켜줌
+                        // 5. 프로바이더가 제공하는 정보 + 추가 정보 수집 ( 주소, ...)
+                        .userInfoEndpoint(user -> user.userService(myOAuth2UserService))
+                        .defaultSuccessUrl("/user/loginSuccess", true)
                 )
                 .logout(auth -> auth
                         .logoutUrl("/user/logout")
