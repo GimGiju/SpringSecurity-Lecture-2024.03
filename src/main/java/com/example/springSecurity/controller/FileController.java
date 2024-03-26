@@ -69,7 +69,7 @@ public class FileController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			url = "/sbbs/file/download/image/" + filename;
+			url = "/ss/file/download/image/" + filename;
 			System.out.println(url);
 		}
 

@@ -8,6 +8,7 @@ import com.example.springSecurity.util.AsideUtil;
 import com.nimbusds.jose.proc.SecurityContext;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -88,7 +89,6 @@ public class SecurityUserController {
         return "common/alertMsg";
     }
 
-    @ResponseBody
     @GetMapping("/loginSuccess")            //@ResponseBody @GetMapping("/loginSuccess"): 로그인 성공 후 실행되는 메서드입니다. SecurityContextHolder를 사용하여 현재 인증된 사용자의 정보를 가져와서 로그인한 사용자의 ID를 반환합니다.
     public String loginSuccess(HttpSession session, Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -140,6 +140,22 @@ public class SecurityUserController {
         model.addAttribute("menu", menu);
 
         return "user/list";
+    }
+
+    @ResponseBody
+    @GetMapping("detail/{uid}")
+    public String detail(@PathVariable String uid){
+        SecurityUser securityUser = securityService.getUserByUid(uid);
+        JSONObject jUser = new JSONObject();
+        jUser.put("uid", uid);
+        jUser.put("uid2", uid);
+        jUser.put("hashedPwd", securityUser.getPwd());
+        jUser.put("uname", securityUser.getUname());
+        jUser.put("email", securityUser.getEmail());
+        jUser.put("provider", securityUser.getProvider());
+        jUser.put("role", securityUser.getRole());
+        jUser.put("picture", securityUser.getPicture());
+        return jUser.toString();
     }
 
     //위의 코드를 통해 사용자의 로그인, 회원가입 기능이 구현되어 있습니다. 또한 로그인 성공 후에는 해당 사용자의 ID를 반환하여 처리할 수 있도록 구현되어 있습니다.
